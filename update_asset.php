@@ -18,7 +18,7 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $assets_code = $_POST['asset_code'];
+    $assets_code = $_POST['assets_code'];
     $location = $_POST['location'];
     $category = $_POST['category'];
     $pic = $_POST['pic'];
@@ -27,12 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
 
     $bukti_foto = null;
+
+    error_log("POST Data: " . print_r($_POST, true));
     
     if (isset($_FILES['proof_file']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
         $file_tmp_name = $_FILES['proof_file']['tmp_name'];
         $file_name = $_FILES['proof_file']['name'];
         $file_size = $_FILES['proof_file']['size'];
         $file_error = $_FILES['proof_file']['error'];
+
+        error_log('Nama File: ' . $file_name);
 
         $upload_dir = 'bukti/';
 
@@ -46,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (in_array(mime_content_type($file_tmp_name), $allowed_types)) {
             if (move_uploaded_file($file_tmp_name, $file_path)) {
                 $bukti_foto = $file_name;
+                error_log('File berhasil diupload: ' . $bukti_foto);
             } else {
                 echo json_encode(['success' => false, 'error' => 'Failed to upload file']);
                 exit;
@@ -54,7 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo json_encode(['success' => false, 'error' => 'Invalid file type']);
             exit;
         }
+    } else {
+        error_log('Tidak ada file yang diupload atau error: ' . $_FILES['proof_file']['error']);
     }
+
+    error_log('Nama Foto untuk Database: ' . $bukti_foto);
 
     $sql = "UPDATE assets SET 
             id_lokasi = ?, 
@@ -65,6 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             id_user = ?, 
             bukti_foto = ?  
             WHERE assets_code = ?";
+
+    error_log('Query: ' . $sql);
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('iiiissss', $location, $category, $pic, $status, $kondisi, $user_id, $bukti_foto, $assets_code);
@@ -79,4 +90,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
-
+?>
