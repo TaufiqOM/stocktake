@@ -181,6 +181,8 @@ function generatePicOptions($pics, $selected_id_pic)
 </head>
 
 <body style="background-color: rgb(222, 254, 255);">
+    <a href="logout.php" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-3">Logout</a>
+
     <div class="container mt-5">
         <div class="d-flex align-items-center mb-4">
                 <img src="logo/logo.png" alt="Logo" class="me-3" style="width: 80px; height: 50px;">
