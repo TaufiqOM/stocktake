@@ -116,7 +116,9 @@ if (isset($_POST['submit'])) {
                                         <strong>PIC:</strong>
                                         <select class='form-select pic'>
                                             " . generatePicOptions($pics, $selected_id_pic) . "
-                                        </select>
+                                        </select><br>
+                                        <strong>Foto:</strong>
+                                        <input type='file' name='proof_file' class='form-control' accept='image/*'>
                                     </p>
                                     <button class='btn btn-success save-changes'>Simpan Perubahan</button>
                                 </div>
@@ -181,7 +183,7 @@ function generatePicOptions($pics, $selected_id_pic)
 <body style="background-color: rgb(222, 254, 255);">
     <div class="container mt-5">
         <h1 class="text-center">Cari Data Aset</h1>
-        <form method="POST" action="" class="mb-4">
+        <form method="POST" action="" class="mb-4" enctype="multipart/form-data">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-8 col-lg-10 mb-4">
                     <div class="input-group">
@@ -190,7 +192,7 @@ function generatePicOptions($pics, $selected_id_pic)
                         <button type="submit" name="submit" class="btn btn-primary btn-sm">Cari</button>
                     </div>
                 </div>
-                </div>
+            </div>
         </form>
 
     <div class="row justify-content-center d-flex align-items-center">
@@ -203,20 +205,7 @@ function generatePicOptions($pics, $selected_id_pic)
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.0/dist/sweetalert2.min.js"></script>
 
-    <!-- Custom Script -->
     <script>
-        document.querySelectorAll('.status-barang').forEach(function (select) {
-            select.addEventListener('change', function () {
-                const kondisiSection = this.closest('.card-body').querySelector('.kondisi-barang-section');
-                if (this.value === '1') {
-                    kondisiSection.style.display = 'block';
-                } else {
-                    kondisiSection.style.display = 'none';
-                    kondisiSection.querySelector('.kondisi-barang').value = '';
-                }
-            });
-        });
-
         document.querySelectorAll('.save-changes').forEach(function (button) {
             button.addEventListener('click', function () {
                 const cardBody = this.closest('.card-body');
@@ -226,14 +215,19 @@ function generatePicOptions($pics, $selected_id_pic)
                 const pic = cardBody.querySelector('.pic').value;
                 const status = cardBody.querySelector('.status-barang').value;
                 const kondisi = cardBody.querySelector('.kondisi-barang').value;
+                const fileInput = cardBody.querySelector('input[name="proof_file"]');
+                const file = fileInput.files[0];
 
                 const formData = new FormData();
-                formData.append('asset_code', assetCode);
+                formData.append('assets_code', assetCode);
                 formData.append('location', location);
                 formData.append('category', category);
                 formData.append('pic', pic);
                 formData.append('status', status);
                 formData.append('kondisi', kondisi);
+                if (file) {
+                    formData.append('proof_file', file);
+                }
 
                 fetch('update_asset.php', {
                     method: 'POST',

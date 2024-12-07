@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kondisi = $_POST['kondisi'] ?? null;
     $user_id = $_SESSION['user_id'];
 
+    // Handle file upload
     $bukti_foto = null;
     
     if (isset($_FILES['proof_file']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
@@ -56,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // Update asset details with the uploaded file (if any)
     $sql = "UPDATE assets SET 
             id_lokasi = ?, 
             id_kategori = ?, 
@@ -79,4 +81,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
-?>
+
