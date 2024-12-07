@@ -206,6 +206,16 @@ function generatePicOptions($pics, $selected_id_pic)
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.0/dist/sweetalert2.min.js"></script>
 
     <script>
+        document.querySelectorAll('.status-barang').forEach(function (select) {
+            select.addEventListener('change', function () {
+                const kondisiSection = this.closest('.card-body').querySelector('.kondisi-barang-section');
+                if (this.value === '1') {
+                    kondisiSection.style.display = 'block';
+                } else {
+                    kondisiSection.style.display = 'none';
+                }
+            });
+        });
         document.querySelectorAll('.save-changes').forEach(function (button) {
             button.addEventListener('click', function () {
                 const cardBody = this.closest('.card-body');
