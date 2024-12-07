@@ -1,17 +1,15 @@
 <?php
 session_start();
 
-// Check if the user is logged in
 if (!isset($_SESSION['username'])) {
-    header('Location: login.php');  // Redirect to login page if not logged in
+    header('Location: login.php');
     exit;
 }
 
-// Database connection
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$dbname = 'stocktake'; // Your database name
+$dbname = 'stocktake';
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -19,7 +17,6 @@ if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
 }
 
-// Fetch all locations for dropdown
 $locations = [];
 $sql_locations = 'SELECT id_lokasi, nama_lokasi FROM lokasi';
 $result_locations = $conn->query($sql_locations);
@@ -29,7 +26,6 @@ if ($result_locations->num_rows > 0) {
     }
 }
 
-// Fetch all categories for dropdown
 $categories = [];
 $sql_categories = 'SELECT id_kategori, nama_kategori FROM kategori';
 $result_categories = $conn->query($sql_categories);
@@ -39,7 +35,6 @@ if ($result_categories->num_rows > 0) {
     }
 }
 
-// Fetch all PICs for dropdown
 $pics = [];
 $sql_pics = 'SELECT id_pic, nama_pic FROM pic';
 $result_pics = $conn->query($sql_pics);
@@ -49,7 +44,6 @@ if ($result_pics->num_rows > 0) {
     }
 }
 
-// Check if form is submitted
 if (isset($_POST['submit'])) {
     $assets_code = $_POST['assets_code'];
 
@@ -65,13 +59,11 @@ if (isset($_POST['submit'])) {
             LEFT JOIN pic p ON a.id_pic = p.id_pic
             WHERE a.assets_code = ?";
 
-    // Prepare statement
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $assets_code);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Display result in cards
     $card_output = '';
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -126,13 +118,6 @@ if (isset($_POST['submit'])) {
                                             " . generatePicOptions($pics, $selected_id_pic) . "
                                         </select>
                                     </p>
-                                    
-                                    <!-- Upload Bukti -->
-                                    <div class='mb-3'>
-                                        <label for='proof_file' class='form-label'>Upload Bukti</label>
-                                        <input type='file' class='form-control' name='proof_file' id='proof_file' accept='image/*'>
-                                    </div>
-
                                     <button class='btn btn-success save-changes'>Simpan Perubahan</button>
                                 </div>
                             </div>
@@ -149,7 +134,6 @@ if (isset($_POST['submit'])) {
 
 $conn->close();
 
-// Helper functions
 function generateLocationOptions($locations, $selected_id_lokasi)
 {
     $options = "<option value='' " . (is_null($selected_id_lokasi) ? 'selected' : '') . '>Pilih Lokasi</option>';
@@ -197,46 +181,85 @@ function generatePicOptions($pics, $selected_id_pic)
 <body style="background-color: rgb(222, 254, 255);">
     <div class="container mt-5">
         <h1 class="text-center">Cari Data Aset</h1>
-        <form method="POST" action="" class="mb-4" enctype="multipart/form-data">
+        <form method="POST" action="" class="mb-4">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-8 col-lg-10 mb-4">
                     <div class="input-group">
-                        <input type="text" name="assets_code" id="assets_code" class="form-control" placeholder="Masukkan Kode Aset" required autofocus>
+                        <input type="text" name="assets_code" id="assets_code" class="form-control"
+                            placeholder="Masukkan Kode Aset" required autofocus>
                         <button type="submit" name="submit" class="btn btn-primary btn-sm">Cari</button>
                     </div>
                 </div>
-            </div>
+                </div>
         </form>
 
-        <!-- Output card here -->
-        <div class="row justify-content-center d-flex align-items-center">
-            <?php echo isset($card_output) ? $card_output : ''; ?>
-        </div>
+    <div class="row justify-content-center d-flex align-items-center">
+        <?php echo isset($card_output) ? $card_output : ''; ?>
+    </div>
     </div>
 
-    <!-- Bootstrap 5 and SweetAlert2 JS -->
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.0/dist/sweetalert2.all.min.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.0/dist/sweetalert2.min.js"></script>
 
-    <!-- Custom JS for form behavior -->
+    <!-- Custom Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.save-changes').forEach(function (button) {
-                button.addEventListener('click', function () {
-                    Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Data Aset akan diperbarui!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, simpan',
-                        cancelButtonText: 'No, cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // Handle form submission via AJAX or any other method
-                            Swal.fire('Simpan!', 'Data telah disimpan.', 'success');
+        document.querySelectorAll('.status-barang').forEach(function (select) {
+            select.addEventListener('change', function () {
+                const kondisiSection = this.closest('.card-body').querySelector('.kondisi-barang-section');
+                if (this.value === '1') {
+                    kondisiSection.style.display = 'block';
+                } else {
+                    kondisiSection.style.display = 'none';
+                    kondisiSection.querySelector('.kondisi-barang').value = '';
+                }
+            });
+        });
+
+        document.querySelectorAll('.save-changes').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const cardBody = this.closest('.card-body');
+                const assetCode = cardBody.closest('.card').querySelector('.card-header h2').textContent.trim();
+                const location = cardBody.querySelector('.location').value;
+                const category = cardBody.querySelector('.category').value;
+                const pic = cardBody.querySelector('.pic').value;
+                const status = cardBody.querySelector('.status-barang').value;
+                const kondisi = cardBody.querySelector('.kondisi-barang').value;
+
+                const formData = new FormData();
+                formData.append('asset_code', assetCode);
+                formData.append('location', location);
+                formData.append('category', category);
+                formData.append('pic', pic);
+                formData.append('status', status);
+                formData.append('kondisi', kondisi);
+
+                fetch('update_asset.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Changes saved successfully!',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Failed to save changes!',
+                                icon: 'error',
+                            });
                         }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                     });
-                });
             });
         });
     </script>

@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-// Database connection
 $host = 'localhost';
 $username = 'root';
 $password = '';
-$dbname = 'stocktake'; // Your database name
+$dbname = 'stocktake';
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -13,22 +12,19 @@ if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
 }
 
-// Check if form is submitted
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Query to validate the user credentials
     $sql = "SELECT id_user, username FROM user WHERE username = ? AND password = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ss', $username, $password);  // Using 'ss' as both are strings
+    $stmt->bind_param('ss', $username, $password);
     $stmt->execute();
     $stmt->store_result();
 
-    // If username and password match, create a session
     if ($stmt->num_rows > 0) {
-        $_SESSION['username'] = $username;  // Store username in session
-        header('Location: index.php');  // Redirect to index.php
+        $_SESSION['username'] = $username;
+        header('Location: index.php');
         exit;
     } else {
         $error_message = "Invalid username or password.";
