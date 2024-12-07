@@ -29,32 +29,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bukti_foto = null;
 
     error_log("POST Data: " . print_r($_POST, true));
-    
+
     if (isset($_FILES['proof_file']) && $_FILES['proof_file']['error'] === UPLOAD_ERR_OK) {
         $file_tmp_name = $_FILES['proof_file']['tmp_name'];
         $file_name = $_FILES['proof_file']['name'];
-        $file_size = $_FILES['proof_file']['size'];
-        $file_error = $_FILES['proof_file']['error'];
-
-        error_log('Nama File: ' . $file_name);
-
         $upload_dir = 'bukti/';
 
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0755, true);
         }
 
-        $file_path = $upload_dir . basename($file_name);
-
         $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
-        if (in_array(mime_content_type($file_tmp_name), $allowed_types)) {
-            if (move_uploaded_file($file_tmp_name, $file_path)) {
-                $bukti_foto = $file_name;
-                error_log('File berhasil diupload: ' . $bukti_foto);
-            } else {
-                echo json_encode(['success' => false, 'error' => 'Failed to upload file']);
-                exit;
+        $file_type = mime_content_type($file_tmp_name);
+
+        if (in_array($file_type, $allowed_types)) {
+            $compressed_file_path = $upload_dir . 'compressed_' . basename($file_name);
+
+            switch ($file_type) {
+                case 'image/jpeg':
+                    $image = imagecreatefromjpeg($file_tmp_name);
+                    imagejpeg($image, $compressed_file_path, 40); // Compress to 40% quality
+                    break;
+                case 'image/png':
+                    $image = imagecreatefrompng($file_tmp_name);
+                    imagepng($image, $compressed_file_path, 8); // PNG compression (scale 0-9)
+                    break;
+                case 'image/gif':
+                    $image = imagecreatefromgif($file_tmp_name);
+                    imagegif($image, $compressed_file_path); // No quality adjustment for GIF
+                    break;
+                default:
+                    echo json_encode(['success' => false, 'error' => 'Unsupported file type']);
+                    exit;
             }
+
+            imagedestroy($image); // Free memory
+            $bukti_foto = 'compressed_' . basename($file_name);
+            error_log('File berhasil dikompresi dan disimpan: ' . $bukti_foto);
         } else {
             echo json_encode(['success' => false, 'error' => 'Invalid file type']);
             exit;
