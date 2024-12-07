@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2024 at 12:03 AM
+-- Generation Time: Dec 08, 2024 at 12:32 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -2593,7 +2593,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama_user`, `username`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'ABD Ghofur', 'HL24100619', '$2y$10$7Kh1NlPQJ37dNQweS/tIGuxeZ4FIC0yChaql8/2U79ojbd5fsDWTa', '2024-12-07 16:59:53', '2024-12-07 16:59:53'),
+(1, 'ABD Ghofur', 'HL24100619', '$2y$10$jGA37L6te.DMlmS8m18mFegLBckK2TkaDXLwlkTDmm2mWDGHB7cai', '2024-12-07 16:59:53', '2024-12-07 23:15:31'),
 (2, 'Abd Rochim', 'KT24070599', '$2y$10$QrL0ZJ8JdjCTFDl4eld2FuFmFyocMgqXOaFti.iL8CCoZ.LfoeTFa', '2024-12-07 16:59:53', '2024-12-07 16:59:53'),
 (3, 'ABD. Ghofur', 'HL24100560', '$2y$10$h6EU9iL9Hzn/3jND0o2rxOxcsoY83uOS6oxxKeJ1ZL4kjnCWQ0OCu', '2024-12-07 16:59:53', '2024-12-07 16:59:53'),
 (4, 'ABD. Kodir', 'HL24100563', '$2y$10$zDNB5JA2kIdizRIeNZJeludyu3ahk7JIVqdRlLxn6CbUMl89jwZuq', '2024-12-07 16:59:53', '2024-12-07 16:59:53'),

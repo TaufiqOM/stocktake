@@ -29,7 +29,12 @@ if (isset($_POST['login'])) {
         if (password_verify($password, $stored_password)) {
             $_SESSION['user_id'] = $id_user;
             $_SESSION['username'] = $stored_username;
-            header('Location: index.php');
+
+            if ($password === '1234') {
+                header('Location: change_password.php');
+            } else {
+                header('Location: index.php');
+            }
             exit;
         } else {
             $error_message = "Invalid username or password.";
@@ -44,6 +49,7 @@ if (isset($_POST['login'])) {
 $conn->close();
 ?>
 
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -56,7 +62,10 @@ $conn->close();
 
 <body style="background-color: rgb(222, 254, 255);">
     <div class="container mt-5">
-        <h1 class="text-center">Login</h1>
+        <div class="d-flex align-items-center mb-4">
+            <img src="logo/logo.png" alt="Logo" class="me-3" style="width: 80px; height: 50px;">
+            <h1 class="text-center flex-grow-1">Login</h1>
+        </div>
 
         <?php
         if (isset($error_message)) {

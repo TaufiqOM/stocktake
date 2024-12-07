@@ -182,7 +182,10 @@ function generatePicOptions($pics, $selected_id_pic)
 
 <body style="background-color: rgb(222, 254, 255);">
     <div class="container mt-5">
-        <h1 class="text-center">Cari Data Aset</h1>
+        <div class="d-flex align-items-center mb-4">
+                <img src="logo/logo.png" alt="Logo" class="me-3" style="width: 80px; height: 50px;">
+                <h1 class="text-center flex-grow-1">Cari Data Asset</h1>
+        </div>
         <form method="POST" action="" class="mb-4" enctype="multipart/form-data">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-8 col-lg-10 mb-4">
@@ -207,15 +210,16 @@ function generatePicOptions($pics, $selected_id_pic)
 
     <script>
         document.querySelectorAll('.status-barang').forEach(function (select) {
-            select.addEventListener('change', function () {
-                const kondisiSection = this.closest('.card-body').querySelector('.kondisi-barang-section');
-                if (this.value === '1') {
-                    kondisiSection.style.display = 'block';
-                } else {
-                    kondisiSection.style.display = 'none';
-                }
-            });
-        });
+    select.addEventListener('change', function () {
+        const kondisiSection = this.closest('.card-body').querySelector('.kondisi-barang-section');
+        if (this.value === '1') {
+            kondisiSection.style.display = 'block';
+        } else {
+            kondisiSection.style.display = 'none';
+        }
+    });
+});
+
         document.querySelectorAll('.save-changes').forEach(function (button) {
             button.addEventListener('click', function () {
                 const cardBody = this.closest('.card-body');
