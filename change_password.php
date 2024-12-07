@@ -50,25 +50,31 @@ $conn->close();
 </head>
 
 <body style="background-color: rgb(222, 254, 255);">
-    <div class="container mt-5">
-    <div class="d-flex align-items-center mb-4">
-            <img src="logo/logo.png" alt="Logo" class="me-3" style="width: 80px; height: 50px;">
-            <h1 class="text-center flex-grow-1">Ganti Password</h1>
-        </div>
-
-        <?php
-        if (isset($error_message)) {
-            echo "<div class='alert alert-danger'>{$error_message}</div>";
-        }
-        ?>
-
-        <form method="POST" action="">
-            <div class="mb-3">
-                <label for="new_password" class="form-label">Password Baru</label>
-                <input type="password" name="new_password" id="new_password" class="form-control" required>
+    <div class="d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow-lg" style="width: 400px;">
+            <div class="card-header bg-info text-white text-center">
+                <h2>Ganti Password</h2>
             </div>
-            <button type="submit" name="change_password" class="btn btn-primary">Ganti Password</button>
-        </form>
+            <div class="card-body">
+                <?php
+                if (isset($error_message)) {
+                    echo "<div class='alert alert-danger'>{$error_message}</div>";
+                }
+                ?>
+                <div class="text-center">
+                    <img src="logo/logo.png" alt="Logo" class="mb-3" style="width: 80px; height: 50px;">
+                </div>
+                <form method="POST" action="">
+                    <div class="mb-3">
+                        <input type="password" name="new_password" id="new_password" class="form-control" placeholder="Password Baru" required>
+                    </div>
+                    <button type="submit" name="change_password" class="btn btn-primary w-100">Ganti Password</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small>© 2024 Stocktake System</small>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
