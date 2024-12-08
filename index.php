@@ -184,9 +184,9 @@ function generatePicOptions($pics, $selected_id_pic)
     <a href="logout.php" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-3">Logout</a>
 
     <div class="container mt-5">
-        <div class="d-flex align-items-center mb-4">
-                <img src="logo/logo.png" alt="Logo" class="me-3" style="width: 80px; height: 50px;">
-                <h1 class="text-center flex-grow-1">Cari Data Asset</h1>
+    <div class="d-flex flex-column flex-md-row align-items-center mb-4">
+            <img src="logo/logo.png" alt="Logo" class="me-3 mb-2 mb-md-0" style="width: 80px; height: 50px;">
+            <h1 class="text-center flex-grow-1 mb-0">Cari Data Asset</h1>
         </div>
         <form method="POST" action="" class="mb-4" enctype="multipart/form-data">
             <div class="row justify-content-center">
