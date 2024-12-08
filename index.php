@@ -178,6 +178,7 @@ function generatePicOptions($pics, $selected_id_pic)
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.0/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="icon" href="logo/logo.png" type="image/png">
 </head>
 
 <body style="background-color: rgb(222, 254, 255);">
